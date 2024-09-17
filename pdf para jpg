@@ -1,0 +1,29 @@
+import os
+from pdf2image import convert_from_path
+
+def pdfs_in_folder_to_jpg(input_folder, output_folder, dpi=300):
+    # Verifica se a pasta de saída existe, se não, cria
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    # Itera sobre todos os arquivos na pasta de entrada
+    for filename in os.listdir(input_folder):
+        if filename.endswith(".pdf"):  # Apenas arquivos PDF
+            pdf_path = os.path.join(input_folder, filename)
+            
+            # Converte o PDF em uma lista de imagens
+            images = convert_from_path(pdf_path, dpi=dpi)
+            
+            for i, image in enumerate(images):
+                # Nome do arquivo de saída baseado no nome do PDF e na página
+                image_name = os.path.join(output_folder, f"{filename}_page_{i + 1}.jpg")
+                
+                # Salva cada imagem em formato JPG
+                image.save(image_name, "JPEG")
+                print(f"Página {i + 1} do arquivo {filename} salva como {image_name}")
+
+# Exemplo de uso
+input_folder = "pasta_pdfs"  # Pasta com arquivos PDF
+output_folder = "pasta_jpgs"  # Pasta onde os JPGs serão salvos
+
+pdfs_in_folder_to_jpg(input_folder, output_folder)
