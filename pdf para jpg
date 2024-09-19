@@ -1,29 +1,32 @@
+import fitz  # PyMuPDF
 import os
-from pdf2image import convert_from_path
 
-def pdfs_in_folder_to_jpg(input_folder, output_folder, dpi=300):
-    # Verifica se a pasta de saída existe, se não, cria
+def pdfs_to_jpgs(pdf_folder, output_folder):
+    # Verifica se a pasta de saída existe, caso contrário, cria
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
-
-    # Itera sobre todos os arquivos na pasta de entrada
-    for filename in os.listdir(input_folder):
-        if filename.endswith(".pdf"):  # Apenas arquivos PDF
-            pdf_path = os.path.join(input_folder, filename)
+    
+    # Itera sobre todos os arquivos na pasta de PDFs
+    for pdf_file in os.listdir(pdf_folder):
+        if pdf_file.endswith(".pdf"):
+            pdf_path = os.path.join(pdf_folder, pdf_file)
+            pdf_document = fitz.open(pdf_path)
             
-            # Converte o PDF em uma lista de imagens
-            images = convert_from_path(pdf_path, dpi=dpi)
+            # Itera sobre cada página do PDF
+            for page_number in range(len(pdf_document)):
+                # Carrega a página
+                page = pdf_document.load_page(page_number)
+                # Converte a página em uma imagem (resolução 300 DPI)
+                pix = page.get_pixmap(dpi=300)
+                # Define o caminho de saída para cada imagem, incluindo o nome do PDF no arquivo
+                output_path = os.path.join(output_folder, f'{os.path.splitext(pdf_file)[0]}_page_{page_number + 1}.jpg')
+                # Salva a imagem no formato JPG
+                pix.save(output_path)
             
-            for i, image in enumerate(images):
-                # Nome do arquivo de saída baseado no nome do PDF e na página
-                image_name = os.path.join(output_folder, f"{filename}_page_{i + 1}.jpg")
-                
-                # Salva cada imagem em formato JPG
-                image.save(image_name, "JPEG")
-                print(f"Página {i + 1} do arquivo {filename} salva como {image_name}")
+            # Fecha o documento PDF
+            pdf_document.close()
 
 # Exemplo de uso
-input_folder = "pasta_pdfs"  # Pasta com arquivos PDF
-output_folder = "pasta_jpgs"  # Pasta onde os JPGs serão salvos
-
-pdfs_in_folder_to_jpg(input_folder, output_folder)
+pdf_folder = 'pdf'  # Pasta onde estão os arquivos PDF
+output_folder = 'imagens_output'  # Pasta onde serão salvas todas as imagens
+pdfs_to_jpgs(pdf_folder, output_folder)
