@@ -11,6 +11,7 @@ def identificar_modelo_pdf(pdf_path):
         for page in pdf.pages:
             texto += page.extract_text()
 
+
     # Exemplo: Identificando o modelo com base em uma palavra-chave
     if re.search(r'Juiz de Fora', texto):
         return 'modelo_1'
