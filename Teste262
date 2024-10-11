@@ -3,7 +3,6 @@ from keras.models import load_model  # TensorFlow is required for Keras to work
 from PIL import Image, ImageOps  # Install pillow instead of PIL
 import numpy as np
 
-
 # Disable scientific notation for clarity
 np.set_printoptions(suppress=True)
 
@@ -31,6 +30,7 @@ image_array = np.asarray(image)
 
 # Normalize the image
 normalized_image_array = (image_array.astype(np.float32) / 127.5) - 1
+
 
 # Load the image into the array
 data[0] = normalized_image_array
