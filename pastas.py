@@ -18,7 +18,7 @@ def identificar_modelo_pdf(pdf_path):
         return 'modelo_2'
     else:
         return 'modelo_desconhecido'
-0
+
 # Função para mover o arquivo para a pasta correta
 def mover_arquivo(pdf_path, destino):
     try:
