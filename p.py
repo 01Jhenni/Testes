@@ -7,6 +7,7 @@ from PIL import Image, ImageTk
 import json
 import os
 
+
 class PDFExtractorApp:
     def __init__(self, root):
         self.root = root
