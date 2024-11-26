@@ -3,6 +3,7 @@ import shutil
 import pdfplumber
 import re
 
+
 # Função para identificar o modelo do PDF
 def identificar_modelo_pdf(pdf_path):
     # Função para ler o conteúdo do PDF com pdfplumber
